@@ -1,0 +1,384 @@
+
+Unit8_lesson4_Section.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001ac  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000200  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000200  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000230  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  0000026c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000a19  00000000  00000000  000002c4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000072d  00000000  00000000  00000cdd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000454  00000000  00000000  0000140a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000090  00000000  00000000  00001860  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000041b  00000000  00000000  000018f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000021a  00000000  00000000  00001d0b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  00001f25  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 86 00 	call	0x10c	; 0x10c <main>
+  64:	0c 94 d4 00 	jmp	0x1a8	; 0x1a8 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <SPI_INIT>:
+
+
+
+
+void SPI_INIT( SPI_Typedef* SPIx,SPI_PinCfg* Pinconfig,SPI_MODE mode)
+{
+  6c:	fc 01       	movw	r30, r24
+  6e:	db 01       	movw	r26, r22
+
+//Speed
+
+if(Pinconfig->Double_Speed_enable == Double_Speed_Condition_Disable)
+  70:	12 96       	adiw	r26, 0x02	; 2
+  72:	8c 91       	ld	r24, X
+  74:	12 97       	sbiw	r26, 0x02	; 2
+  76:	81 11       	cpse	r24, r1
+  78:	07 c0       	rjmp	.+14     	; 0x88 <SPI_INIT+0x1c>
+{
+	SPIx->SPCR |= (Pinconfig->Speed_Scaler<<SPI_SPCR_SPR0_POS);
+  7a:	90 81       	ld	r25, Z
+  7c:	11 96       	adiw	r26, 0x01	; 1
+  7e:	8c 91       	ld	r24, X
+  80:	11 97       	sbiw	r26, 0x01	; 1
+  82:	89 2b       	or	r24, r25
+  84:	80 83       	st	Z, r24
+  86:	08 c0       	rjmp	.+16     	; 0x98 <SPI_INIT+0x2c>
+
+
+}
+else//double Speed
+{
+	SPIx->SPSR |= (SPI_SPSR_SPI2X_POS);
+  88:	81 81       	ldd	r24, Z+1	; 0x01
+  8a:	81 83       	std	Z+1, r24	; 0x01
+	SPIx->SPCR |= (Pinconfig->Speed_Scaler<<SPI_SPCR_SPR0_POS);
+  8c:	90 81       	ld	r25, Z
+  8e:	11 96       	adiw	r26, 0x01	; 1
+  90:	8c 91       	ld	r24, X
+  92:	11 97       	sbiw	r26, 0x01	; 1
+  94:	89 2b       	or	r24, r25
+  96:	80 83       	st	Z, r24
+
+}
+
+
+if(mode == Master)
+  98:	41 11       	cpse	r20, r1
+  9a:	11 c0       	rjmp	.+34     	; 0xbe <SPI_INIT+0x52>
+{	//MASTER mode
+	
+	
+	
+	//Master Mode
+	 SPIx->SPCR |= SPI_SPCR_MSTR;
+  9c:	80 81       	ld	r24, Z
+  9e:	80 61       	ori	r24, 0x10	; 16
+  a0:	80 83       	st	Z, r24
+	
+	
+		
+		//SS->PB4   O/P
+		DDRB |= (1<<PB4_SS);
+  a2:	87 b3       	in	r24, 0x17	; 23
+  a4:	80 61       	ori	r24, 0x10	; 16
+  a6:	87 bb       	out	0x17, r24	; 23
+		//MOSI->PB5 O/P
+		DDRB |= (1<<PB5_MOSI);
+  a8:	87 b3       	in	r24, 0x17	; 23
+  aa:	80 62       	ori	r24, 0x20	; 32
+  ac:	87 bb       	out	0x17, r24	; 23
+		//MISO->PB6 I/P
+		
+		//SCK->PB7  O/P
+		DDRB |= (1<<PB7_SCLK);
+  ae:	87 b3       	in	r24, 0x17	; 23
+  b0:	80 68       	ori	r24, 0x80	; 128
+  b2:	87 bb       	out	0x17, r24	; 23
+	
+	//Enabling the Peripheral
+	SPIx->SPCR |= Pinconfig->Peripheral_Enable;
+  b4:	90 81       	ld	r25, Z
+  b6:	8c 91       	ld	r24, X
+  b8:	89 2b       	or	r24, r25
+  ba:	80 83       	st	Z, r24
+  bc:	08 95       	ret
+	
+	
+	
+	
+}
+else if (mode == Slave)
+  be:	41 30       	cpi	r20, 0x01	; 1
+  c0:	51 f4       	brne	.+20     	; 0xd6 <SPI_INIT+0x6a>
+{
+	
+		//Slave Mode
+		 SPIx->SPCR &= ~(SPI_SPCR_MSTR);
+  c2:	80 81       	ld	r24, Z
+  c4:	8f 7e       	andi	r24, 0xEF	; 239
+  c6:	80 83       	st	Z, r24
+		//SS->PB4   I/P
+		
+		//MOSI->PB5 I/P
+		
+		//MISO->PB6 O/P
+		DDRB|= (1<<PB6_MISO);
+  c8:	87 b3       	in	r24, 0x17	; 23
+  ca:	80 64       	ori	r24, 0x40	; 64
+  cc:	87 bb       	out	0x17, r24	; 23
+		//SCK->PB7  I/P
+		
+			//Enabling the Peripheral
+			SPIx->SPCR |= Pinconfig->Peripheral_Enable;
+  ce:	90 81       	ld	r25, Z
+  d0:	8c 91       	ld	r24, X
+  d2:	89 2b       	or	r24, r25
+  d4:	80 83       	st	Z, r24
+  d6:	08 95       	ret
+
+000000d8 <SPI_SEND>:
+ 
+
+
+
+unsigned char SPI_SEND(SPI_Typedef* SPIx, unsigned char data)
+{
+  d8:	fc 01       	movw	r30, r24
+	
+	 SPIx->SPDR =  data ;
+  da:	62 83       	std	Z+2, r22	; 0x02
+	while( !( ( SPIx->SPSR) & (SPI_SPSR_SPIF) )  );
+  dc:	91 81       	ldd	r25, Z+1	; 0x01
+  de:	99 23       	and	r25, r25
+  e0:	ec f7       	brge	.-6      	; 0xdc <SPI_SEND+0x4>
+	return  SPIx->SPDR;
+  e2:	82 81       	ldd	r24, Z+2	; 0x02
+	
+	
+	 
+}
+  e4:	08 95       	ret
+
+000000e6 <excute>:
+//#define Master_MODE
+//#define Slave_MODE
+//#define  Seven_segment
+
+void excute(SPI_Typedef* SPIx,uint8_t cmd, uint8_t data)
+{	//Putting slave clock to low
+  e6:	cf 93       	push	r28
+  e8:	c4 2f       	mov	r28, r20
+	PORTB &= ~(1<<PB4_SS);
+  ea:	88 b3       	in	r24, 0x18	; 24
+  ec:	8f 7e       	andi	r24, 0xEF	; 239
+  ee:	88 bb       	out	0x18, r24	; 24
+	//Send command
+	SPI_SEND(SPI1,cmd);
+  f0:	8d e2       	ldi	r24, 0x2D	; 45
+  f2:	90 e0       	ldi	r25, 0x00	; 0
+  f4:	0e 94 6c 00 	call	0xd8	; 0xd8 <SPI_SEND>
+	
+ 
+	//Send The data
+	
+	SPI_SEND(SPI1,data);
+  f8:	6c 2f       	mov	r22, r28
+  fa:	8d e2       	ldi	r24, 0x2D	; 45
+  fc:	90 e0       	ldi	r25, 0x00	; 0
+  fe:	0e 94 6c 00 	call	0xd8	; 0xd8 <SPI_SEND>
+	
+ 
+	//Put slave clock on high
+	
+	PORTB |= (1<<PB4_SS);
+ 102:	88 b3       	in	r24, 0x18	; 24
+ 104:	80 61       	ori	r24, 0x10	; 16
+ 106:	88 bb       	out	0x18, r24	; 24
+
+}
+ 108:	cf 91       	pop	r28
+ 10a:	08 95       	ret
+
+0000010c <main>:
+
+
+int main(void)
+{
+ 10c:	cf 93       	push	r28
+ 10e:	df 93       	push	r29
+ 110:	00 d0       	rcall	.+0      	; 0x112 <main+0x6>
+ 112:	1f 92       	push	r1
+ 114:	cd b7       	in	r28, 0x3d	; 61
+ 116:	de b7       	in	r29, 0x3e	; 62
+}
+#endif
+
+//#ifdef Seven_segment
+SPI_PinCfg SPI_Master;
+SPI_Master.Double_Speed_enable = Double_Speed_Condition_Disable;
+ 118:	1b 82       	std	Y+3, r1	; 0x03
+SPI_Master.Peripheral_Enable = Peripheral_Condition_Enable;
+ 11a:	80 e4       	ldi	r24, 0x40	; 64
+ 11c:	89 83       	std	Y+1, r24	; 0x01
+SPI_Master.Speed_Scaler = Prescle_16;
+ 11e:	81 e0       	ldi	r24, 0x01	; 1
+ 120:	8a 83       	std	Y+2, r24	; 0x02
+SPI_INIT( SPI1,&SPI_Master,Master);
+ 122:	40 e0       	ldi	r20, 0x00	; 0
+ 124:	be 01       	movw	r22, r28
+ 126:	6f 5f       	subi	r22, 0xFF	; 255
+ 128:	7f 4f       	sbci	r23, 0xFF	; 255
+ 12a:	8d e2       	ldi	r24, 0x2D	; 45
+ 12c:	90 e0       	ldi	r25, 0x00	; 0
+ 12e:	0e 94 36 00 	call	0x6c	; 0x6c <SPI_INIT>
+
+uint8_t counter = 0;
+uint32_t index_display  ;
+excute(SPI1,0x09,0xFF);//Decode all displays 11111111
+ 132:	4f ef       	ldi	r20, 0xFF	; 255
+ 134:	69 e0       	ldi	r22, 0x09	; 9
+ 136:	8d e2       	ldi	r24, 0x2D	; 45
+ 138:	90 e0       	ldi	r25, 0x00	; 0
+ 13a:	0e 94 73 00 	call	0xe6	; 0xe6 <excute>
+excute(SPI1,0x0B,0x07);//Set scan limit (digit 0 to digit 7)
+ 13e:	47 e0       	ldi	r20, 0x07	; 7
+ 140:	6b e0       	ldi	r22, 0x0B	; 11
+ 142:	8d e2       	ldi	r24, 0x2D	; 45
+ 144:	90 e0       	ldi	r25, 0x00	; 0
+ 146:	0e 94 73 00 	call	0xe6	; 0xe6 <excute>
+excute(SPI1,0x0A,0x0F);//Max intensity
+ 14a:	4f e0       	ldi	r20, 0x0F	; 15
+ 14c:	6a e0       	ldi	r22, 0x0A	; 10
+ 14e:	8d e2       	ldi	r24, 0x2D	; 45
+ 150:	90 e0       	ldi	r25, 0x00	; 0
+ 152:	0e 94 73 00 	call	0xe6	; 0xe6 <excute>
+excute(SPI1,0x0C,0x01);//Turn on the display
+ 156:	41 e0       	ldi	r20, 0x01	; 1
+ 158:	6c e0       	ldi	r22, 0x0C	; 12
+ 15a:	8d e2       	ldi	r24, 0x2D	; 45
+ 15c:	90 e0       	ldi	r25, 0x00	; 0
+ 15e:	0e 94 73 00 	call	0xe6	; 0xe6 <excute>
+SPI_Master.Double_Speed_enable = Double_Speed_Condition_Disable;
+SPI_Master.Peripheral_Enable = Peripheral_Condition_Enable;
+SPI_Master.Speed_Scaler = Prescle_16;
+SPI_INIT( SPI1,&SPI_Master,Master);
+
+uint8_t counter = 0;
+ 162:	40 e0       	ldi	r20, 0x00	; 0
+excute(SPI1,0x0A,0x0F);//Max intensity
+excute(SPI1,0x0C,0x01);//Turn on the display
+
+while(1)
+{
+	for(index_display = 1 ; index_display<9; index_display++)
+ 164:	c1 2c       	mov	r12, r1
+ 166:	d1 2c       	mov	r13, r1
+ 168:	76 01       	movw	r14, r12
+ 16a:	c3 94       	inc	r12
+ 16c:	16 c0       	rjmp	.+44     	; 0x19a <main+0x8e>
+	{
+		excute(SPI1,index_display,counter++);
+ 16e:	11 e0       	ldi	r17, 0x01	; 1
+ 170:	14 0f       	add	r17, r20
+ 172:	6c 2d       	mov	r22, r12
+ 174:	8d e2       	ldi	r24, 0x2D	; 45
+ 176:	90 e0       	ldi	r25, 0x00	; 0
+ 178:	0e 94 73 00 	call	0xe6	; 0xe6 <excute>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 17c:	2f e3       	ldi	r18, 0x3F	; 63
+ 17e:	8d e0       	ldi	r24, 0x0D	; 13
+ 180:	93 e0       	ldi	r25, 0x03	; 3
+ 182:	21 50       	subi	r18, 0x01	; 1
+ 184:	80 40       	sbci	r24, 0x00	; 0
+ 186:	90 40       	sbci	r25, 0x00	; 0
+ 188:	e1 f7       	brne	.-8      	; 0x182 <main+0x76>
+ 18a:	00 c0       	rjmp	.+0      	; 0x18c <main+0x80>
+ 18c:	00 00       	nop
+excute(SPI1,0x0A,0x0F);//Max intensity
+excute(SPI1,0x0C,0x01);//Turn on the display
+
+while(1)
+{
+	for(index_display = 1 ; index_display<9; index_display++)
+ 18e:	2f ef       	ldi	r18, 0xFF	; 255
+ 190:	c2 1a       	sub	r12, r18
+ 192:	d2 0a       	sbc	r13, r18
+ 194:	e2 0a       	sbc	r14, r18
+ 196:	f2 0a       	sbc	r15, r18
+	{
+		excute(SPI1,index_display,counter++);
+ 198:	41 2f       	mov	r20, r17
+excute(SPI1,0x0A,0x0F);//Max intensity
+excute(SPI1,0x0C,0x01);//Turn on the display
+
+while(1)
+{
+	for(index_display = 1 ; index_display<9; index_display++)
+ 19a:	89 e0       	ldi	r24, 0x09	; 9
+ 19c:	c8 16       	cp	r12, r24
+ 19e:	d1 04       	cpc	r13, r1
+ 1a0:	e1 04       	cpc	r14, r1
+ 1a2:	f1 04       	cpc	r15, r1
+ 1a4:	20 f3       	brcs	.-56     	; 0x16e <main+0x62>
+ 1a6:	de cf       	rjmp	.-68     	; 0x164 <main+0x58>
+
+000001a8 <_exit>:
+ 1a8:	f8 94       	cli
+
+000001aa <__stop_program>:
+ 1aa:	ff cf       	rjmp	.-2      	; 0x1aa <__stop_program>
